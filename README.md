@@ -2116,3 +2116,89 @@ All results are fully reproducible:
 ---
 
 **End of Chapter 3**
+
+# Chapter 4: Conclusion and Future Work
+
+## 4.1 Conclusion
+
+Road safety and autonomous vehicle navigation represent critical challenges in modern transportation systems due to their direct impact on human lives. The development of accurate, real-time vehicle detection and path planning systems can significantly reduce accidents and improve traffic flow. Manual monitoring of traffic conditions is time-consuming, prone to errors, and impossible to scale for comprehensive road safety coverage. Therefore, the field of intelligent transportation systems would benefit greatly from any automated approach that can transform human-dependent traffic monitoring into an intelligent, autonomous system.
+
+In this thesis, I attempted to create a comprehensive model that can aid in vehicle detection and path planning in an automated manner, making road safety analysis faster and more reliable. I chose RSUD20K, a robust vehicle detection dataset, because it provides diverse real-world traffic scenarios with proper annotations across 13 vehicle classes. After preprocessing the dataset, I implemented multiple state-of-the-art deep learning architectures:
+
+**Object Detection Models:**
+- YOLOv8, YOLOv10, and YOLOv11 (nano, small, medium, large, and extra-large variants)
+- DETR (Detection Transformer)
+- GroundingDINO
+
+**Classification Models:**
+- ResNet18 (CNN-based approach)
+- Vision Transformer (ViT-Base)
+- DINOv2 (Self-supervised learning)
+
+The most significant finding is that **YOLOv11x achieved the highest performance** with **81.85% mAP@50** and **58.38% mAP@50-95**, demonstrating superior accuracy in detecting vehicles across various scenarios. I used these models to make predictions on multi-class vehicle detection (person, rickshaw, rickshaw_van, auto_rickshaw, truck, pickup_truck, private_car, motorcycle, bicycle, bus, micro_bus, covered_van, and human_hauler). Performance was evaluated using precision, recall, F1-score, and mean Average Precision (mAP) metrics.
+
+Among classification models, **DINOv2 achieved the best accuracy at 51.23%**, followed by ResNet18 (49.46%) and ViT-Base (48.84%). This demonstrates that self-supervised learning approaches like DINOv2 can effectively learn robust features for vehicle classification.
+
+Additionally, I developed practical applications including:
+1. **Real-time video processing** with vehicle tracking and speed estimation (mean error: 3.9 km/h)
+2. **Distance estimation** using pinhole camera model (mean error: 8.4%)
+3. **Path planning advisor** system with 96.4% safety prediction accuracy
+
+A comparative study is provided in Chapter 3, demonstrating that **YOLOv11x outperforms all other models** in both accuracy and real-time performance metrics. The speed vs. accuracy analysis shows that YOLOv11n achieves the fastest inference (432.09 FPS), while YOLOv11x provides the best accuracy-speed balance for practical ADAS deployment.
+
+This type of research can help with intelligent transportation systems, autonomous vehicle development, traffic monitoring automation, and real-time driver assistance applications.
+
+## 4.2 Research Limitations
+
+The constraints of research are those aspects of the model or methodology that have had a significant impact on the study's outcomes. The researcher cannot control the limitations imposed on the techniques and findings. Any disadvantages that potentially affect the outcome should be addressed in the limitation section. This study has the following limitations:
+
+- **Multi-object tracking in crowded scenes** is not fully optimized, leading to potential ID switches.
+- **3D depth estimation** for accurate vehicle positioning is not implemented.
+- **Night-time and adverse weather conditions** are underrepresented in the training dataset.
+- Due to **computational resource limitations**, continuous model retraining with real-time data is not feasible.
+- **Model ensembling** (combining multiple YOLO variants) is not performed, which could potentially improve overall accuracy.
+- **Occlusion handling** for partially visible vehicles requires further improvement.
+- **Real-time deployment on edge devices** (Raspberry Pi, NVIDIA Jetson) is not thoroughly tested.
+- **Dataset imbalance** exists for rare vehicle classes like `pickup_truck` (26.17% mAP@50) and `covered_van` (29.48% mAP@50).
+
+## 4.3 Future Work
+
+Future work represents additional steps toward research enhancement that can help achieve broader objectives. It assists other researchers in developing new ideas or improving existing methods. The algorithms in this study demonstrate strong performance in vehicle detection and classification. However, additional work could make the system more practical and deployable in real-world scenarios. The future work for this study is outlined below:
+
+### 4.3.1 Model Enhancement
+- **Model ensembling**: Combine YOLOv11x, YOLOv10x, and YOLOv8x predictions to achieve higher accuracy through weighted voting.
+- **Attention mechanisms**: Integrate spatial and channel attention modules to improve small object detection (bicycles, motorcycles).
+- **Transformer-based tracking**: Implement TransTrack or ByteTrack for robust multi-object tracking with minimal ID switches.
+
+### 4.3.2 Advanced Features
+- **3D bounding box estimation**: Extract depth information to calculate vehicle dimensions and precise positioning.
+- **Semantic segmentation**: Implement instance segmentation (YOLOv11-seg, Mask R-CNN) for pixel-level vehicle boundary detection.
+- **Trajectory prediction**: Develop LSTM or Transformer-based models to predict vehicle movement patterns for collision avoidance.
+
+### 4.3.3 Real-World Deployment
+- **Mobile application development**: Create Android/iOS apps with TensorFlow Lite or ONNX Runtime for on-device inference.
+- **Edge device optimization**: Deploy quantized models (INT8) on NVIDIA Jetson Nano, Raspberry Pi 4, or Google Coral for real-time processing.
+- **Web-based dashboard**: Develop a cloud-based traffic monitoring system with live video streaming and alert notifications.
+
+### 4.3.4 Dataset Expansion
+- **Weather condition augmentation**: Add synthetic rain, fog, and snow effects to improve model robustness.
+- **Night-time data collection**: Capture and annotate low-light traffic scenarios.
+- **Multi-camera fusion**: Integrate data from multiple camera angles for comprehensive scene understanding.
+
+### 4.3.5 Advanced ADAS Features
+- **Lane detection integration**: Combine vehicle detection with lane line detection for complete driving scene understanding.
+- **Traffic sign recognition**: Extend the system to detect and classify road signs for driver alerts.
+- **Collision warning system**: Implement Time-To-Collision (TTC) calculation based on distance and speed estimation.
+- **Driver monitoring**: Add in-cabin camera analysis for drowsiness and distraction detection.
+
+### 4.3.6 Safety and Validation
+- **Large-scale testing**: Validate the system across diverse geographical locations and traffic conditions.
+- **Failure case analysis**: Systematically study and address common failure modes (occlusion, small objects, crowded scenes).
+- **Real-time performance optimization**: Reduce inference latency below 10ms for critical safety applications.
+
+If the **YOLOv11x detection model** is merged with **DINOv2 classification features** through a two-stage pipeline, overall system performance and reliability can be significantly increased, providing a robust foundation for next-generation Advanced Driver Assistance Systems.
+
+---
+
+**Word Count:** Approximately 950 words  
+**Figures Referenced:** Figure 3.1 - 3.11 (Chapter 3: Results and Discussion)
